@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional PC & Laptop Repair Services</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Professional PC & Laptop Repair Services</h1>
+        <p>Fast, reliable, and professional diagnostics and tech support.</p>
+    </header>
+
+    <main class="container">
+        <section class="services">
+            <h2>Our Core Services</h2>
+            <ul>
+                <li>💻 Laptop & PC Diagnostics</li>
+                <li>🛠️ Hardware Upgrades & Replacement</li>
+                <li>🦠 Virus & Malware Removal</li>
+                <li>💾 Data Recovery & OS Reinstallation</li>
+            </ul>
+        </section>
+
+        <section class="booking-section">
+            <h2>Book a Repair Intake Ticket</h2>
+            <form id="repair-form">
+                <input type="text" id="cust-name" placeholder="Your Full Name" required>
+                <input type="email" id="cust-email" placeholder="Your Email Address" required>
+                
+                <select id="device-type" required>
+                    <option value="" disabled selected>Select Your Device Type</option>
+                    <option value="Laptop">Laptop (Windows/Mac)</option>
+                    <option value="Desktop PC">Desktop PC</option>
+                    <option value="Custom Gaming Rig">Custom Gaming Rig</option>
+                </select>
+
+                <textarea id="issue-desc" placeholder="Describe the problem you're experiencing..." rows="4" required></textarea>
+                
+                <button type="submit">Submit Repair Request</button>
+            </form>
+            <div id="form-feedback"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Professional PC & Laptop Repair Services. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
