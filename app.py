@@ -45,6 +45,36 @@ def book_repair():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+        # Route: Serve the private Admin Dashboard HTML page
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin.html')
+
+# API Route: Fetch all tickets from Supabase for the dashboard
+@app.route('/api/admin/tickets', methods=['GET'])
+def admin_get_tickets():
+    try:
+        # Fetch records ordered by newest arrival
+        response = supabase.table('repair_requests').select('*').order('created_at', descending=True).execute()
+        return jsonify(response.data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# API Route: Update a ticket's status (Pending -> Completed)
+@app.route('/api/admin/tickets/<int:ticket_id>', methods=['PATCH'])
+def admin_update_ticket(ticket_id):
+    try:
+        data = request.get_json()
+        new_status = data.get('status')
+        
+        if not new_status:
+            return jsonify({"error": "Status is required"}), 400
+
+        # Update the row status field inside Supabase
+        response = supabase.table('repair_requests').update({"status": new_status}).eq("id", ticket_id).execute()
+        return jsonify({"message": "Ticket updated successfully!", "data": response.data}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
