@@ -52,12 +52,23 @@ def admin_dashboard():
 
 # API Route: Fetch all tickets from Supabase for the dashboard
 @app.route('/api/admin/tickets', methods=['GET'])
+# API Route: Fetch all tickets from Supabase for the dashboard
+@app.route('/api/admin/tickets', methods=['GET'])
 def admin_get_tickets():
     try:
         # Fetch records ordered by newest arrival
         response = supabase.table('repair_requests').select('*').order('created_at', descending=True).execute()
-        return jsonify(response.data), 200
+        
+        # Safe extraction check for different library versions
+        if hasattr(response, 'data'):
+            tickets_data = response.data
+        else:
+            tickets_data = response
+            
+        return jsonify(tickets_data), 200
     except Exception as e:
+        # Crucial: This prints the exact error into your Render Logs tab!
+        print("CRITICAL BACKEND ERROR IN GET_TICKETS:", str(e))
         return jsonify({"error": str(e)}), 500
 
 # API Route: Update a ticket's status (Pending -> Completed)
