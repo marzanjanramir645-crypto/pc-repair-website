@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Repair Tickets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .ticket-card { background: #fff; border-left: 5px solid #0056b3; padding: 15px; margin-bottom: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .ticket-card.Completed { border-left-color: #28a745; background-color: #f9fff9; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; }
+        .badge.Pending { background: #ffeeba; color: #856404; }
+        .badge.Completed { background: #d4edda; color: #155724; }
+        .admin-actions { margin-top: 10px; display: flex; gap: 10px; }
+        .btn-sm { padding: 6px 12px; font-size: 0.9rem; background: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        .btn-sm.btn-pending { background: #ffc107; color: #212529; }
+    </style>
+</head>
+<body>
+    <header style="background-color: #212529;">
+        <h1>Control Panel: Intake Management</h1>
+        <p><a href="/" style="color: #bbb; text-decoration: none;">← Back to Main Website</a></p>
+    </header>
+
+    <main class="container">
+        <h2>Active Customer Tickets</h2>
+        <div id="tickets-container">Loading tickets...</div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('tickets-container');
+
+            async function loadTickets() {
+                try {
+                    const res = await fetch('/api/admin/tickets');
+                    const tickets = await res.json();
+                    
+                    if(tickets.length === 0) {
+                        container.innerHTML = "<p>No repair tickets found in the system.</p>";
+                        return;
+                    }
+
+                    container.innerHTML = '';
+                    tickets.forEach(ticket => {
+                        const card = document.createElement('div');
+                        card.className = `ticket-card ${ticket.status}`;
+                        
+                        card.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3>${ticket.customer_name} <span class="badge ${ticket.status}">${ticket.status}</span></h3>
+                                <small>${new Date(ticket.created_at).toLocaleDateString()}</small>
+                            </div>
+                            <p><strong>Email:</strong> ${ticket.email}</p>
+                            <p><strong>Device:</strong> ${ticket.device_type}</p>
+                            <p><strong>Issue Reported:</strong> ${ticket.issue_description}</p>
+                            <div class="admin-actions">
+                                ${ticket.status !== 'Completed' ? `<button class="btn-sm" onclick="updateStatus(\${ticket.id}, 'Completed')">Mark as Completed</button>` : ''}
+                                ${ticket.status !== 'Pending' ? `<button class="btn-sm btn-pending" onclick="updateStatus(\${ticket.id}, 'Pending')">Revert to Pending</button>` : ''}
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                } catch (err) {
+                    container.innerHTML = "<p style='color:red;'>Failed to load tickets.</p>";
+                }
+            }
+
+            window.updateStatus = async (id, status) => {
+                const res = await fetch(`/api/admin/tickets/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: status })
+                });
+                if (res.ok) {
+                    loadTickets();
+                }
+            };
+
+            loadTickets();
+        });
+    </script>
+</body>
+</html>
