@@ -3,10 +3,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const formFeedback = document.getElementById('form-feedback');
 
     // =====================================================================
+    // MODERN SCROLL NAVBAR SCROLL LOGIC & HAMBURGER SYSTEM
+    // =====================================================================
+    const navContainer = document.querySelector('.nav-container');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const navLinks = document.querySelectorAll('header nav a');
+    
+    let lastScrollY = window.scrollY;
+
+    // Scroll Logic: Hide navbar on scroll down, show on scroll up
+    window.addEventListener('scroll', () => {
+        // Only hide the bar if the mobile side menu drawer isn't currently thrown open
+        if (navMenu && !navMenu.classList.contains('open')) {
+            if (window.scrollY > lastScrollY && window.scrollY > 80) {
+                // Scrolling down - slide menu bar smoothly out of sight
+                navContainer.classList.add('nav-hidden');
+            } else {
+                // Scrolling up - display menu bar cleanly
+                navContainer.classList.remove('nav-hidden');
+            }
+        }
+        lastScrollY = window.scrollY;
+    }, { passive: true });
+
+    // Hamburger Overlay Drawer trigger event handler
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuToggle.classList.toggle('open');
+            navMenu.classList.toggle('open');
+        });
+
+        // Close mobile drawer immediately if a navigation link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('open');
+                navMenu.classList.remove('open');
+            });
+        });
+
+        // Close mobile menu if clicking anywhere outside the side drawer interface panel
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                menuToggle.classList.remove('open');
+                navMenu.classList.remove('open');
+            }
+        });
+    }
+
+    // =====================================================================
     // AESTHETIC SCROLL TRANSITIONS & ACTIVE NAV TRACKING
     // =====================================================================
     const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('header nav a');
 
     // Intersection Observer configuration for scroll fade-in
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -22,12 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         link.classList.remove('active');
                     }
                 });
+            } else {
+                // Drop visibility slightly when scrolled past to accentuate the active block
+                entry.target.classList.remove('visible');
             }
         });
     }, {
         root: null,
         threshold: 0.15, // Triggers when 15% of the item appears on viewport
-        rootMargin: "-50px 0px -100px 0px"
+        rootMargin: "-20px 0px -40px 0px"
     });
 
     // Attach observers to all layout sections
