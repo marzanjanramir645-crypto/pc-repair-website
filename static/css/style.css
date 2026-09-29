@@ -3,7 +3,7 @@
    ===================================================================== */
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 180px; /* Adjusted to prevent mobile header overlap */
+    scroll-padding-top: 100px; /* Snaps sections perfectly below the fixed bar */
 }
 
 * {
@@ -23,17 +23,45 @@ body {
 }
 
 /* =====================================================================
-   HEADER & NAVIGATION MANAGEMENT
+   FIXED INTERACTIVE NAVIGATION CONTAINER (TOP BAR)
+   ===================================================================== */
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #0f172a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* Handles the smooth slide transition on scrolling */
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* JavaScript toggles this class to hide the bar on scroll down */
+.nav-container.nav-hidden {
+    transform: translateY(-100%);
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+/* =====================================================================
+   HEADER HERO BANNER 
    ===================================================================== */
 header {
     background-color: #1e293b;
     color: #ffffff;
-    padding: 2rem 1rem;
+    padding: 7rem 1rem 3rem 1rem; /* Upper padding leaves safe room under fixed top bar */
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 header h1 {
@@ -44,16 +72,12 @@ header h1 {
 header p {
     color: #94a3b8;
     font-size: 1.1rem;
-    margin-bottom: 1.5rem;
 }
 
+/* Desktop Menu Layout Options */
 nav {
-    margin-top: 1rem;
-    font-size: 1rem;
     display: flex;
-    justify-content: center;
     gap: 0.5rem;
-    flex-wrap: wrap; /* Allows menu links to wrap elegantly on small phone screens */
 }
 
 nav a {
@@ -69,6 +93,27 @@ nav a:hover, nav a.active {
     color: #ffffff;
     background-color: rgba(56, 189, 248, 0.15);
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+}
+
+/* Modern Hamburger Icon Toggle Button (Hidden on Desktop) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+.menu-toggle .bar {
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* =====================================================================
@@ -233,14 +278,14 @@ footer {
    RESPONSIVE MEDIA QUERIES (Automated Device Adjustments)
    ===================================================================== */
 
-/* Mobile Phones and Small Screens (Max 600px) */
-@media screen and (max-width: 600px) {
+/* Mobile Phones and Small Screens (Max 768px) */
+@media screen and (max-width: 768px) {
     html {
-        scroll-padding-top: 220px; /* Accounts for wrapped vertical mobile menus */
+        scroll-padding-top: 80px; /* Matches smaller fixed top bar space */
     }
 
     header {
-        padding: 1.5rem 0.75rem;
+        padding: 5.5rem 0.75rem 2rem 0.75rem;
     }
 
     header h1 {
@@ -249,18 +294,59 @@ footer {
 
     header p {
         font-size: 0.95rem;
-        margin-bottom: 1rem;
     }
 
+    /* Activating the hamburger action toggle trigger */
+    .menu-toggle {
+        display: flex;
+    }
+
+    /* Transform navigation layout into a modern off-screen side drawer slide out */
     nav {
-        gap: 0.25rem;
+        position: fixed;
+        top: 0;
+        right: -100%; /* Hidden off-screen right by default */
+        width: 75%;
+        max-width: 280px;
+        height: 100vh;
+        background-color: #0f172a;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 5rem 1.5rem 2rem 1.5rem;
+        gap: 1.2rem;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25);
+        /* Smooth cubic-bezier drawer entry movement speeds */
+        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Displays the side drawer overlay when clicked active */
+    nav.open {
+        right: 0;
     }
 
     nav a {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.9rem;
-        width: 100%; /* Stacks links neatly onto full rows if the screen is ultra-narrow */
-        text-align: center;
+        font-size: 1.1rem;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        border-bottom: 1px solid #1e293b;
+        border-radius: 0;
+    }
+
+    nav a:last-child {
+        border-bottom: none;
+    }
+
+    /* Hamburger Line Transforms to create an "X" close mark shape */
+    .menu-toggle.open .bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-toggle.open .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.open .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
     }
 
     .container {
@@ -294,12 +380,8 @@ footer {
     }
 }
 
-/* Tablets and Medium Workspace Interfaces (601px to 900px) */
-@media screen and (min-width: 601px) and (max-width: 900px) {
-    html {
-        scroll-padding-top: 170px;
-    }
-
+/* Tablets and Medium Layout Scales (769px to 900px) */
+@media screen and (min-width: 769px) and (max-width: 900px) {
     header h1 {
         font-size: 1.9rem;
     }
