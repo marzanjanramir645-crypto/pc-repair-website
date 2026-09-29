@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional PC & Laptop Repair Services</title>
+    <title>Professional PC & Laptop Repair Services | Fast Tech Support</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -11,37 +11,76 @@
         <h1>Professional PC & Laptop Repair Services</h1>
         <p>Fast, reliable, and professional diagnostics and tech support.</p>
         <nav>
-            <a href="{{ url_for('home') }}">Home</a> | 
-            <a href="{{ url_for('about') }}">About Us</a> | 
-            <a href="{{ url_for('booking') }}">Book a Repair</a>
+            <a href="#home">Home</a> | 
+            <a href="#services">Services & Pricing</a> | 
+            <a href="#about">About Us</a> | 
+            <a href="#booking">Book a Repair</a>
         </nav>
     </header>
 
     <main class="container">
-        <section class="services">
-            <h2>Our Core Services</h2>
+        
+        <!-- HOME SECTION -->
+        <section id="home" class="hero-section">
+            <h2>Premium Computer Solutions Done Right</h2>
+            <p>Is your computer crashing, running slow, or refusing to turn on? Don't panic. Our expert tech support engineers are ready to bring your machine back to peak performance. We service all major brands, including Apple, ASUS, Dell, HP, Lenovo, and custom-built rigs.</p>
+            <div class="badges" style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                <span>⏱️ Same-Day Diagnostics</span>
+                <span>🛡️ 90-Day Warranty</span>
+                <span>🥇 Certified Technicians</span>
+            </div>
+        </section>
+
+        <!-- SERVICES & PRICING SECTION -->
+        <section id="services" class="services">
+            <h2>Our Core Services & Estimated Rates</h2>
+            <p style="margin-bottom: 1rem; color: #475569;">We believe in transparent pricing with absolutely no hidden fees.</p>
             <ul>
-                <li>💻 Laptop & PC Diagnostics</li>
-                <li>🛠️ Hardware Upgrades & Replacement</li>
-                <li>🦠 Virus & Malware Removal</li>
-                <li>💾 Data Recovery & OS Reinstallation</li>
+                <li>
+                    <strong>💻 Comprehensive Diagnostics</strong> 
+                    <p>Complete component testing, thermal imaging, and software integrity scans to find the root issue. Free if we perform the repair!</p>
+                </li>
+                <li>
+                    <strong>🛠️ Hardware Upgrades & Replacement</strong> 
+                    <p>Breathe new life into your system with lightning-fast NVMe SSD replacements, RAM upgrades, cracked laptop screen replacements, and new power supplies.</p>
+                </li>
+                <li>
+                    <strong>🦠 Advanced Virus & Malware Removal</strong> 
+                    <p>Deep-clean extraction of adware, spyware, ransomware, and trojans, paired with a complementary installation of robust security defensive tools.</p>
+                </li>
+                <li>
+                    <strong>💾 Critical Data Recovery & OS Reinstallation</strong> 
+                    <p>Accidental deletion? Failing drive? We recover precious family photos and business files, followed by a clean, optimized installation of Windows or macOS.</p>
+                </li>
             </ul>
         </section>
 
-        <section class="booking-section">
+        <!-- ABOUT US SECTION -->
+        <section id="about" class="about-section">
+            <h2>About Our Technical Team</h2>
+            <p>Founded by a team of passionate system builders and network architects, our shop has been the trusted local hub for computer troubleshooting. We don't just patch problems—we optimize systems to ensure they run faster and cooler than the day you unboxed them.</p>
+            <br>
+            <h3>The Direct Guarantee Policy</h3>
+            <p>We respect your time and money. That is why we proudly stand behind our <strong>"No Fix, No Fee"</strong> rule. If our team cannot diagnose or fix your machine's hardware defect, you do not owe us a single cent.</p>
+        </section>
+
+        <!-- CONTACT & INTAKE BOOKING FORM -->
+        <section id="booking" class="booking-section">
             <h2>Book a Repair Intake Ticket</h2>
+            <p style="margin-bottom: 1.5rem; color: #475569;">Skip the phone queues! Open an official service ticket instantly below. Once submitted, our bench technicians will review your problem and send an immediate drop-off time slot to your email inbox.</p>
+            
             <form id="repair-form">
                 <input type="text" id="cust-name" placeholder="Your Full Name" required>
                 <input type="email" id="cust-email" placeholder="Your Email Address" required>
                 
                 <select id="device-type" required>
                     <option value="" disabled selected>Select Your Device Type</option>
-                    <option value="Laptop">Laptop (Windows/Mac)</option>
-                    <option value="Desktop PC">Desktop PC</option>
-                    <option value="Custom Gaming Rig">Custom Gaming Rig</option>
+                    <option value="Laptop">Laptop (Windows/Macbook)</option>
+                    <option value="Desktop PC">Standard Desktop Workstation</option>
+                    <option value="Custom Gaming Rig">Custom Gaming Rig / Liquid-Cooled System</option>
                 </select>
 
-                <textarea id="issue-desc" placeholder="Describe the problem you're experiencing..." rows="4" required></textarea>
+                <textarea id="issue-desc" placeholder="Please describe what happens (e.g., blue screen errors, won't power on, running extremely hot, liquid spill, etc.)..." rows="4" required></textarea>
                 
                 <button type="submit">Submit Repair Request</button>
             </form>
