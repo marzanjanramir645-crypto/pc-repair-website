@@ -13,12 +13,37 @@ url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
+
+# =====================================================================
+# FRONTEND PAGES (User Facing Routes)
+# =====================================================================
+
 # Main web route to serve the homepage
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# API Route: Handle incoming booking requests
+# New Route: Serve the About page view
+@app.route('/about')
+def about():
+    return render_template('index.html')
+
+# New Route: Serve the Booking form page view
+@app.route('/booking')
+def booking():
+    return render_template('index.html')
+
+# Route: Serve the private Admin Dashboard HTML page
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin.html')
+
+
+# =====================================================================
+# REST API ENDPOINTS (Database Interactivity)
+# =====================================================================
+
+# API Route: Handle incoming booking requests from the client-side
 @app.route('/api/book-repair', methods=['POST'])
 def book_repair():
     try:
@@ -33,7 +58,7 @@ def book_repair():
         if not all([customer_name, email, device_type, issue_description]):
             return jsonify({"error": "All fields are required."}), 400
 
-        # Inject into Supabase
+        # Inject into Supabase database table
         response = supabase.table('repair_requests').insert({
             "customer_name": customer_name,
             "email": email,
@@ -45,13 +70,7 @@ def book_repair():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-        # Route: Serve the private Admin Dashboard HTML page
-@app.route('/admin')
-def admin_dashboard():
-    return render_template('admin.html')
 
-# API Route: Fetch all tickets from Supabase for the dashboard
-@app.route('/api/admin/tickets', methods=['GET'])
 # API Route: Fetch all tickets from Supabase for the dashboard
 @app.route('/api/admin/tickets', methods=['GET'])
 def admin_get_tickets():
@@ -86,6 +105,7 @@ def admin_update_ticket(ticket_id):
         return jsonify({"message": "Ticket updated successfully!", "data": response.data}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
