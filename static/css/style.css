@@ -1,9 +1,9 @@
 /* =====================================================================
-   GLOBAL CONFIGURATION & CORE RESET
+   GLOBAL CONFIGURATION & BODY BACKGROUND
    ===================================================================== */
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 100px; /* Snaps sections perfectly below the fixed bar */
+    scroll-padding-top: 100px;
 }
 
 * {
@@ -16,11 +16,70 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333333;
-    background-color: #f8f9fa;
+    
+    /* 
+       High-Tech Light Background Overlay Matrix:
+       Uses an ultra-subtle tech schematic grid layer that blends into a soft slate base.
+       This gives a premium tech aesthetic without distracting from form reading.
+    */
+    background-color: #f8fafc;
+    background-image: 
+        linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: center top;
+    background-attachment: fixed; /* Keeps pattern pinned while panels fade over it */
+    
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
+/* =====================================================================
+   CONTENT CARD HOUSING (Ensures Maximum Text Readability)
+   ===================================================================== */
+section {
+    /* Pure opaque white backdrop cuts cleanly through any background line patterns */
+    background: #ffffff; 
+    padding: 2.5rem;
+    border-radius: 12px;
+    
+    /* 
+       Deep modern ambient shadow offsets:
+       Visually lifts the content boxes above the background grid layers 
+    */
+    box-shadow: 
+        0 4px 6px -1px rgba(15, 23, 42, 0.05), 
+        0 12px 20px -3px rgba(15, 23, 42, 0.04);
+    margin-bottom: 2rem;
+    
+    /* Transition fade-in engine configurations */
+    opacity: 0.15;
+    transform: scale(0.99);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, background-color 0.4s ease;
+}
+
+/* Active State triggered dynamically by main.js scroll/nav tracking triggers */
+section.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Accent anchor focus targeting highlight flash animation */
+section:target {
+    animation: flashActiveSection 0.8s ease-in-out forwards;
+}
+
+@keyframes flashActiveSection {
+    0% {
+        background-color: rgba(56, 189, 248, 0.06);
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2), 0 12px 20px -3px rgba(15, 23, 42, 0.04);
+    }
+    100% {
+        background-color: #ffffff;
+    }
+}
+
 
 /* =====================================================================
    FIXED INTERACTIVE NAVIGATION CONTAINER (TOP BAR)
