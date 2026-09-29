@@ -1,55 +1,11 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-    color: #333;
+/* =====================================================================
+   GLOBAL CONFIGURATION & CORE RESET
+   ===================================================================== */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 160px; /* Prevents header overlap when sections snap into view */
 }
-header {
-    background-color: #0056b3;
-    color: white;
-    text-align: center;
-    padding: 40px 20px;
-}
-header h1 { margin: 0; font-size: 2.2rem; }
-.container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-section {
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-.services ul { list-style: none; padding: 0; }
-.services li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 1.1rem; }
-form { display: flex; flex-direction: column; gap: 15px; }
-input, select, textarea {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-button {
-    padding: 14px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-button:hover { background-color: #218838; }
-#form-feedback { margin-top: 15px; text-align: center; font-weight: bold; }
-footer { text-align: center; padding: 20px; color: #777; font-size: 0.9rem; }
 
-/* Reset and Base Styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -66,13 +22,18 @@ body {
     min-height: 100vh;
 }
 
-/* Header & Navigation Styles */
+/* =====================================================================
+   HEADER & NAVIGATION MANAGEMENT
+   ===================================================================== */
 header {
     background-color: #1e293b;
     color: #ffffff;
     padding: 2rem 1rem;
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    position: sticky; /* Optional: keeps navigation locked to top during fades */
+    top: 0;
+    z-index: 100;
 }
 
 header h1 {
@@ -89,22 +50,26 @@ header p {
 nav {
     margin-top: 1rem;
     font-size: 1rem;
-    color: #475569;
 }
 
 nav a {
-    color: #38bdf8;
+    color: #94a3b8;
     text-decoration: none;
     font-weight: 600;
     padding: 0.5rem 1rem;
-    transition: color 0.2s ease;
+    border-radius: 4px;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-nav a:hover {
+nav a:hover, nav a.active {
     color: #ffffff;
+    background-color: rgba(56, 189, 248, 0.15); /* Subtle blue glow backing */
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
 }
 
-/* Container Structure */
+/* =====================================================================
+   LAYOUT CONTAINER & AESTHETIC PANEL FADE TRANSLITIONS
+   ===================================================================== */
 .container {
     flex: 1;
     max-width: 800px;
@@ -113,12 +78,39 @@ nav a:hover {
     padding: 0 1rem;
 }
 
+/* Base State: Slightly translucent and scaled down for cross-fade prepping */
 section {
     background: #ffffff;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 2rem;
+    
+    opacity: 0.15;
+    transform: scale(0.99);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, background-color 0.4s ease;
+}
+
+/* Active State: Triggered instantly by the JS IntersectionObserver script */
+section.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Target State: Triggers a clean blend focus effect immediately on nav bar clicks */
+section:target {
+    animation: flashActiveSection 0.8s ease-in-out forwards;
+}
+
+@keyframes flashActiveSection {
+    0% {
+        background-color: rgba(56, 189, 248, 0.08);
+        transform: scale(1.01);
+    }
+    100% {
+        background-color: #ffffff;
+        transform: scale(1);
+    }
 }
 
 h2 {
@@ -128,7 +120,9 @@ h2 {
     padding-bottom: 0.5rem;
 }
 
-/* Services List Styling */
+/* =====================================================================
+   TYPOGRAPHY & LIST FORMATTING
+   ===================================================================== */
 .services ul {
     list-style: none;
 }
@@ -143,7 +137,9 @@ h2 {
     border-bottom: none;
 }
 
-/* Intake Booking Form Styles */
+/* =====================================================================
+   INTAKE BOOKING FORM COMPONENTS
+   ===================================================================== */
 #repair-form {
     display: flex;
     flex-direction: column;
@@ -180,20 +176,27 @@ h2 {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.1s ease;
 }
 
 #repair-form button:hover {
     background-color: #0369a1;
 }
 
-/* Form Interactivity Response Alert Feedback Box */
+#repair-form button:active {
+    transform: scale(0.98);
+}
+
+/* =====================================================================
+   INTERACTION NOTIFICATION ASYNC FEEDBACK BOXES
+   ===================================================================== */
 #form-feedback {
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 6px;
     font-weight: 500;
     display: none;
+    text-align: center;
 }
 
 #form-feedback.success {
@@ -210,7 +213,9 @@ h2 {
     border: 1px solid #fecaca;
 }
 
-/* Footer Styling */
+/* =====================================================================
+   GLOBAL PAGE FOOTER
+   ===================================================================== */
 footer {
     background-color: #0f172a;
     color: #64748b;
@@ -219,45 +224,3 @@ footer {
     font-size: 0.9rem;
     margin-top: auto;
 }
-/* Add this right at the top of your style.css file */
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 140px; /* Prevents sticky header from clipping titles */
-}
-
-/* Add an entry fade-in effect to all sections */
-section {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-    
-    /* Transition parameters */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* This utility class triggers the animation */
-section.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Aesthetic active highlight rules for navigation links */
-nav a {
-    color: #94a3b8;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: color 0.3s ease, background-color 0.3s ease;
-}
-
-nav a:hover, nav a.active {
-    color: #ffffff;
-    background-color: rgba(56, 189, 248, 0.15); /* Subtle blue glow backing */
-}
-
-
