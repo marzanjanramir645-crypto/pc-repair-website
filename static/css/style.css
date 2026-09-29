@@ -3,7 +3,7 @@
    ===================================================================== */
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 160px; /* Prevents header overlap when sections snap into view */
+    scroll-padding-top: 180px; /* Adjusted to prevent mobile header overlap */
 }
 
 * {
@@ -31,7 +31,7 @@ header {
     padding: 2rem 1rem;
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    position: sticky; /* Optional: keeps navigation locked to top during fades */
+    position: sticky;
     top: 0;
     z-index: 100;
 }
@@ -50,6 +50,10 @@ header p {
 nav {
     margin-top: 1rem;
     font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Allows menu links to wrap elegantly on small phone screens */
 }
 
 nav a {
@@ -63,12 +67,12 @@ nav a {
 
 nav a:hover, nav a.active {
     color: #ffffff;
-    background-color: rgba(56, 189, 248, 0.15); /* Subtle blue glow backing */
+    background-color: rgba(56, 189, 248, 0.15);
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
 }
 
 /* =====================================================================
-   LAYOUT CONTAINER & AESTHETIC PANEL FADE TRANSLITIONS
+   LAYOUT CONTAINER & AESTHETIC PANEL FADE TRANSITIONS
    ===================================================================== */
 .container {
     flex: 1;
@@ -223,4 +227,84 @@ footer {
     padding: 1.5rem 1rem;
     font-size: 0.9rem;
     margin-top: auto;
+}
+
+/* =====================================================================
+   RESPONSIVE MEDIA QUERIES (Automated Device Adjustments)
+   ===================================================================== */
+
+/* Mobile Phones and Small Screens (Max 600px) */
+@media screen and (max-width: 600px) {
+    html {
+        scroll-padding-top: 220px; /* Accounts for wrapped vertical mobile menus */
+    }
+
+    header {
+        padding: 1.5rem 0.75rem;
+    }
+
+    header h1 {
+        font-size: 1.6rem;
+    }
+
+    header p {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+
+    nav {
+        gap: 0.25rem;
+    }
+
+    nav a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.9rem;
+        width: 100%; /* Stacks links neatly onto full rows if the screen is ultra-narrow */
+        text-align: center;
+    }
+
+    .container {
+        margin: 1rem auto;
+    }
+
+    section {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 1.35rem;
+    }
+
+    .services li {
+        font-size: 1rem;
+        padding: 0.6rem 0;
+    }
+
+    #repair-form {
+        gap: 0.9rem;
+    }
+
+    #repair-form input,
+    #repair-form select,
+    #repair-form textarea,
+    #repair-form button {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablets and Medium Workspace Interfaces (601px to 900px) */
+@media screen and (min-width: 601px) and (max-width: 900px) {
+    html {
+        scroll-padding-top: 170px;
+    }
+
+    header h1 {
+        font-size: 1.9rem;
+    }
+
+    section {
+        padding: 1.75rem;
+    }
 }
