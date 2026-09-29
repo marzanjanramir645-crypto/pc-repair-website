@@ -1,40 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
     const repairForm = document.getElementById('repair-form');
-    const feedback = document.getElementById('form-feedback');
+    const formFeedback = document.getElementById('form-feedback');
 
-    repairForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        feedback.textContent = "Submitting details...";
-        feedback.style.color = "#333";
+    if (repairForm) {
+        repairForm.addEventListener('submit', async (e) => {
+            // Prevent the browser from reloading the page
+            e.preventDefault();
 
-        const payload = {
-            name: document.getElementById('cust-name').value.trim(),
-            email: document.getElementById('cust-email').value.trim(),
-            device: document.getElementById('device-type').value,
-            issue: document.getElementById('issue-desc').value.trim()
-        };
+            // Extract values matching your backend API keys
+            const payload = {
+                name: document.getElementById('cust-name').value.trim(),
+                email: document.getElementById('cust-email').value.trim(),
+                device: document.getElementById('device-type').value,
+                issue: document.getElementById('issue-desc').value.trim()
+            };
 
-        try {
-            const res = await fetch('/api/book-repair', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            // Provide UI loading indicator state
+            const submitBtn = repairForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = 'Processing Ticket...';
+            submitBtn.disabled = true;
 
-            const result = await res.json();
+            // Clear previous message states
+            formFeedback.className = '';
+            formFeedback.textContent = '';
+            formFeedback.style.display = 'none';
 
-            if (res.ok) {
-                feedback.textContent = "Success! Your request has been recorded. We'll be in touch shortly.";
-                feedback.style.color = "green";
-                repairForm.reset();
-            } else {
-                feedback.textContent = `Error: ${result.error || 'Failed to submit'}`;
-                feedback.style.color = "red";
+            try {
+                // Post form payload directly into your Flask backend endpoint
+                const response = await fetch('/api/book-repair', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Success handling: update message UI and clean fields
+                    formFeedback.textContent = result.message || 'Booking request received successfully!';
+                    formFeedback.className = 'success';
+                    formFeedback.style.display = 'block';
+                    repairForm.reset();
+                } else {
+                    // API validation or submission server error handling
+                    formFeedback.textContent = result.error || 'Failed to submit repair request.';
+                    formFeedback.className = 'error';
+                    formFeedback.style.display = 'block';
+                }
+
+            } catch (error) {
+                // Connection or offline client network errors
+                console.error('Submission breakdown:', error);
+                formFeedback.textContent = 'Network error: Unable to connect to tech support server.';
+                formFeedback.className = 'error';
+                formFeedback.style.display = 'block';
+            } finally {
+                // Restore button submission state
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
             }
-        } catch (err) {
-            feedback.textContent = "Network error. Please try again later.";
-            feedback.style.color = "red";
-        }
-    });
+        });
+    }
 });
