@@ -2,6 +2,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const repairForm = document.getElementById('repair-form');
     const formFeedback = document.getElementById('form-feedback');
 
+    // =====================================================================
+    // AESTHETIC SCROLL TRANSITIONS & ACTIVE NAV TRACKING
+    // =====================================================================
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('header nav a');
+
+    // Intersection Observer configuration for scroll fade-in
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // Sync active navigation link states dynamically on scroll
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === `#${entry.target.id}`) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }, {
+        root: null,
+        threshold: 0.15, // Triggers when 15% of the item appears on viewport
+        rootMargin: "-50px 0px -100px 0px"
+    });
+
+    // Attach observers to all layout sections
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // =====================================================================
+    // INTAKE TICKET FORM HANDLER
+    // =====================================================================
     if (repairForm) {
         repairForm.addEventListener('submit', async (e) => {
             // Prevent the browser from reloading the page
